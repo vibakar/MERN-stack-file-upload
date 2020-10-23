@@ -1,6 +1,7 @@
-const { userExists, createUser } = require("../lib/users");
 const Iron = require("@hapi/iron");
+const { userExists, createUser } = require("../lib/users");
 const { isLoggedIn } = require("../middleware/auth");
+const User = require('../model/User');
 
 const auth = (app) => {
   app.post("/api/login", async (req, res) => {
@@ -21,23 +22,20 @@ const auth = (app) => {
     }
   });
 
-  app.post("/api/register", async (req, res) => {
+  app.post("/api/register", (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
       res.json({ success: false, message: "Unauthorized" });
     } else {
-      const userCreated = createUser(email, password);
-      if (userCreated) {
-        const token = await Iron.seal(
-          { email },
-          process.env.IRON_KEY,
-          Iron.defaults
-        );
+      const user = new User({email: email, password: password, role: 'user' });
+      user.save()
+      .then(() => Iron.seal({ email }, process.env.IRON_KEY, Iron.defaults))
+      .then(token => {
         res.setHeader("authorization", token);
         res.json({ success: true, message: "Signed up successfully!" });
-      } else {
-        res.json({ success: false, message: "User exists already" });
-      }
+      }).catch(err => {
+        res.json({ success: false, message: err.toString() });
+      })
     }
   });
 
