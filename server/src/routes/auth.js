@@ -1,24 +1,26 @@
 const Iron = require("@hapi/iron");
-const { userExists, createUser } = require("../lib/users");
 const { isLoggedIn } = require("../middleware/auth");
 const User = require('../model/User');
 
 const auth = (app) => {
-  app.post("/api/login", async (req, res) => {
+  app.post("/api/login", (req, res) => {
+    console.log("-------")
     const { email, password } = req.body;
     if (!email || !password) {
       res.json({ success: false, message: "Unauthorized" });
     } else {
-      if (!userExists(email, password)) {
-        res.json({ success: false, message: "No user found" });
-      }
-      const token = await Iron.seal(
-        { email },
-        process.env.IRON_KEY,
-        Iron.defaults
-      );
-      res.setHeader("authorization", token);
-      res.json({ success: true, message: "Logged in successfully!" });
+      User.findOne({email, password})
+      .then(doc => {
+        if(doc) return Iron.seal({ email }, process.env.IRON_KEY, Iron.defaults)
+        else res.json({ success: false, message: "No user found" });
+      })
+      .then((token)=> {
+        res.setHeader("authorization", token);
+        res.json({ success: true, message: "Logged in successfully!" });
+      })
+      .catch(err => {
+        res.json({ success: false, message: err.toString() });
+      });
     }
   });
 
@@ -35,7 +37,7 @@ const auth = (app) => {
         res.json({ success: true, message: "Signed up successfully!" });
       }).catch(err => {
         res.json({ success: false, message: err.toString() });
-      })
+      });
     }
   });
 

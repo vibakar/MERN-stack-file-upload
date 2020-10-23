@@ -1,5 +1,5 @@
 const Iron = require("@hapi/iron");
-const { userExists } = require("../lib/users");
+const User = require('../model/User');
 
 const isLoggedIn = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -28,6 +28,10 @@ const isLoggedIn = async (req, res, next) => {
     }
   }
 };
+
+const userExists = async (email) => {
+  return await User.findOne(email);
+}
 
 module.exports = {
   isLoggedIn,
