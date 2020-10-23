@@ -35,4 +35,16 @@ export default class ApiService {
 			}
 		});
 	}
+
+	static logout() {
+		let token = sessionStorage.getItem('authorization');
+		return axios({
+			method: 'post',
+			url: `${endpoint}/api/logout`,
+			headers: {
+			  Authorization: 'Bearer ' + token
+			}
+		  })
+		.then(res => res.data);
+	}
 }

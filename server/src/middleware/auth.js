@@ -30,7 +30,7 @@ const isLoggedIn = async (req, res, next) => {
 };
 
 const userExists = async (email) => {
-  return await User.findOne(email);
+  return await User.findOne({email});
 }
 
 module.exports = {

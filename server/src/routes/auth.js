@@ -4,7 +4,6 @@ const User = require('../model/User');
 
 const auth = (app) => {
   app.post("/api/login", (req, res) => {
-    console.log("-------")
     const { email, password } = req.body;
     if (!email || !password) {
       res.json({ success: false, message: "Unauthorized" });

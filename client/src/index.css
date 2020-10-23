@@ -52,3 +52,20 @@ form {
   color: blue;
   font-size: 12px;
 }
+
+.login-err {
+  text-align: center;
+  color: red;
+}
+
+.header {
+  flex-grow: 1;
+}
+
+.app-bar {
+  background-color: #005A3C !important;
+}
+
+.logout-btn {
+  text-transform: initial !important;
+}

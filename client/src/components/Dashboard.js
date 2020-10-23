@@ -1,9 +1,10 @@
 import React from 'react';
+import Header from './Header';
 
 function Dashboard() {
     return (
         <>
-            <h4>Dashboard Page</h4>
+            <Header></Header>
         </>
     )
 }
