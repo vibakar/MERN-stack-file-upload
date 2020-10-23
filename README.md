@@ -6,7 +6,7 @@
 - npm install
 - npm start
 
-## To start frontend
+## To start backend
 
 - cd server
 - npm install
