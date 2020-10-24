@@ -47,4 +47,31 @@ export default class ApiService {
 		  })
 		.then(res => res.data);
 	}
+
+	static getFiles() {
+		let token = sessionStorage.getItem('authorization');
+		return axios.get(`${endpoint}/api/files`, {
+			headers: {
+			  'Authorization': 'Bearer ' + token
+			}
+		})
+		.then(res => res.data);
+	}
+
+	static uploadFile(file) {
+		let token = sessionStorage.getItem('authorization');
+		let formData = new FormData();
+		formData.append('file', file);
+		return axios.post(`${endpoint}/api/upload`, formData, {
+			headers: {
+			  'Authorization': 'Bearer ' + token,
+			  'Content-Type': 'multipart/form-data'
+			}
+		})
+		.then(res => res.data);
+	}
+
+	static downloadFile(fileName) {
+		window.location.assign(`${endpoint}/api/download/${fileName}`);
+	}
 }

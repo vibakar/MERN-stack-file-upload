@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const config = require("../config");
-
-const url = `mongodb+srv://${config.db.userName}:${config.db.password}@cluster0.743kn.mongodb.net/${config.db.dbName}?retryWrites=true&w=majority`;
-
+// const url = `mongodb+srv://${config.db.userName}:${config.db.password}@cluster0.743kn.mongodb.net/${config.db.dbName}?retryWrites=true&w=majority`;
+const url = "mongodb://localhost:27017/filesystem";
 mongoose
   .connect(url, {
     useNewUrlParser: true,

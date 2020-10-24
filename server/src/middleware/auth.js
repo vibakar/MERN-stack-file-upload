@@ -11,13 +11,15 @@ const isLoggedIn = async (req, res, next) => {
       res.send({ success: false, message: "Invalid authorization token" });
     }
     try {
-      const { email } = await Iron.unseal(
+      const { email, role } = await Iron.unseal(
         token,
         process.env.IRON_KEY,
         Iron.defaults
       );
       const validUser = userExists(email);
       if (validUser) {
+        req.email = email;
+        req.role = role;
         next();
       } else {
         res.send({ success: false, message: "Invalid authorization token" });

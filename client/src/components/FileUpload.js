@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ApiService from '../services/api.service';
 
 function FileUpload() {
     const [file, setFile] = useState(null);
@@ -13,12 +14,17 @@ function FileUpload() {
         setFile(file[0]);
     }
 
-    const handleUpload = (file) => {
-        console.log(file);
+    const handleUpload = () => {
+      ApiService.uploadFile(file).then(resp => {
         setFile(null);
+      })
+      .catch(err => {
+        setFile(null);
+      });
     };
 
     return (
+      <>
         <Dropzone onDrop={handleDrop} maxFiles={maxFiles} multiple={multiple} accept=".pdf">
         {({getRootProps, getInputProps}) => (
           <section className="file-upload-container">
@@ -40,6 +46,7 @@ function FileUpload() {
           </section>
         )}
       </Dropzone>
+      </>
     )
 }
 

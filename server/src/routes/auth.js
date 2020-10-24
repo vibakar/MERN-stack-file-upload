@@ -28,9 +28,10 @@ const auth = (app) => {
     if (!email || !password) {
       res.json({ success: false, message: "Unauthorized" });
     } else {
-      const user = new User({email: email, password: password, role: 'user' });
+      const role = 'user';
+      const user = new User({email, password, role });
       user.save()
-      .then(() => Iron.seal({ email }, process.env.IRON_KEY, Iron.defaults))
+      .then(() => Iron.seal({ email, role }, process.env.IRON_KEY, Iron.defaults))
       .then(token => {
         res.setHeader("authorization", token);
         res.json({ success: true, message: "Signed up successfully!" });

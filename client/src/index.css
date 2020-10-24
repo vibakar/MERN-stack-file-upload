@@ -87,3 +87,8 @@ form {
   outline: 0;
   border: none;
 }
+
+.action {
+  cursor: pointer;
+  text-decoration: underline;
+}

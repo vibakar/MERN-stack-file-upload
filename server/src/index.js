@@ -1,8 +1,11 @@
 require("dotenv").config();
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
-const auth = require("./routes/auth");
+
 const db = require('./db');
+const auth = require("./routes/auth");
+const file = require('./routes/file');
 
 const app = express();
 
@@ -14,10 +17,13 @@ let allowCrossDomain = function(req, res, next) {
   next();
 }
 
-app.use(bodyParser.json({ limit: "10mb" }));
 app.use(allowCrossDomain);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 auth(app);
+file(app);
 
 app.listen(8080, () => {
   console.log("Server up and running at localhost:8080");
