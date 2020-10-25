@@ -11,7 +11,6 @@ function Header(props) {
     ApiService.logout().then(res => {
       if(res.success) {
         props.history.push('/');
-        sessionStorage.removeItem('authorization');
       }
     });
   }

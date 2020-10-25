@@ -13,6 +13,7 @@ export default class ApiService {
 		.then(res =>{
 			if(res && res.data && res.data.success) {
 				sessionStorage.setItem('authorization',res.headers.authorization);
+				sessionStorage.setItem('role', res.data.role);
 				return res.data;
 			} else {
 				return res;
@@ -29,6 +30,7 @@ export default class ApiService {
 		.then(res =>{
 			if(res && res.data && res.data.success) {
 				sessionStorage.setItem('authorization',res.headers.authorization);
+				sessionStorage.setItem('role', res.data.role);
 				return res.data;
 			} else {
 				return res;
@@ -45,7 +47,11 @@ export default class ApiService {
 			  Authorization: 'Bearer ' + token
 			}
 		  })
-		.then(res => res.data);
+		.then(res => {
+			sessionStorage.removeItem('authorization');
+        	sessionStorage.removeItem('role');
+			return res.data;
+		});
 	}
 
 	static getFiles() {
