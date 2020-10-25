@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ClearIcon from '@material-ui/icons/Clear';
 import ApiService from '../services/api.service';
 
-function FileUpload() {
+function FileUpload(props) {
     const [file, setFile] = useState(null);
-   
     const maxFiles = 1;
     const multiple = false;
+
+    //Setting max file size to 5MB
+    const maxSize = 5242880;
 
     const handleDrop = (file) => {
         setFile(file[0]);
@@ -17,15 +20,20 @@ function FileUpload() {
     const handleUpload = () => {
       ApiService.uploadFile(file).then(resp => {
         setFile(null);
+        props.updateTable();
       })
       .catch(err => {
         setFile(null);
       });
     };
 
+    const handleRemove = () => {
+      setFile(null);
+    };
+
     return (
       <>
-        <Dropzone onDrop={handleDrop} maxFiles={maxFiles} multiple={multiple} accept=".pdf">
+        <Dropzone onDrop={handleDrop} maxFiles={maxFiles} maxSize={maxSize} multiple={multiple} accept=".pdf">
         {({getRootProps, getInputProps}) => (
           <section className="file-upload-container">
             <div {...getRootProps()}>
@@ -35,6 +43,7 @@ function FileUpload() {
             <p>
                 <Button
                     color="primary"
+                    className="mb-3"
                     onClick={handleUpload}
                     startIcon={<CloudUploadIcon />}
                     disabled={!file}
@@ -42,7 +51,16 @@ function FileUpload() {
                 Upload
                 </Button>
             </p>
-            {file ? file.name : ''}
+            {file ? <p>
+                      <span>{file.name}</span>
+                        <Button
+                          color="secondary"
+                          onClick={handleRemove}
+                          startIcon={<ClearIcon />}
+                        ></Button>
+                  </p> 
+            : ''}
+            {!file ? <p className="msg">Only pdf files are allowed. Max size 5MB</p> : ''}
           </section>
         )}
       </Dropzone>
