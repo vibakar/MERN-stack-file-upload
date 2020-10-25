@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const config = require("../config");
-// const url = `mongodb+srv://${config.db.userName}:${config.db.password}@cluster0.743kn.mongodb.net/${config.db.dbName}?retryWrites=true&w=majority`;
-const url = "mongodb://localhost:27017/filesystem";
+const url = `mongodb+srv://${config.db.userName}:${config.db.password}@cluster0.743kn.mongodb.net/${config.db.dbName}?retryWrites=true&w=majority`;
+
 mongoose
   .connect(url, {
     useNewUrlParser: true,
@@ -11,5 +11,5 @@ mongoose
     console.log("Connected to mongo db");
   })
   .catch((err) => {
-    console.log(err, "Error connecting to mongo db");
+    console.log(`Error connecting to mongo db : ${err}}`);
   });

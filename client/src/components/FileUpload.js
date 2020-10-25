@@ -9,7 +9,7 @@ function FileUpload(props) {
     const [file, setFile] = useState(null);
     const maxFiles = 1;
     const multiple = false;
-
+    
     //Setting max file size to 5MB
     const maxSize = 5242880;
 
@@ -18,11 +18,14 @@ function FileUpload(props) {
     }
 
     const handleUpload = () => {
+      props.showBackdrop(true);
       ApiService.uploadFile(file).then(resp => {
+        props.showBackdrop(false);
         setFile(null);
         props.updateTable();
       })
       .catch(err => {
+        props.showBackdrop(false);
         setFile(null);
       });
     };
